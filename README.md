@@ -40,3 +40,7 @@ Jest for testing
 
 Why This Project
 I chose this project because humor connects people. It will help me improve my web development skills, both frontend and backend. Plus, it's a fun and creative project to work on.
+ 
+
+ Bruno is a new feature added to this project.
+- Assist users in finding the funniest song names.
