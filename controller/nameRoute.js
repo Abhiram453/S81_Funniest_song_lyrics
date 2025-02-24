@@ -55,21 +55,17 @@ router.put('/funniest-lyrics/:id',async(req,res)=>{
     }catch(err){
         res.status(500).json({message:err.message})
     }
-    router.delete('/funniest-lyrics/:id',async(req,res)=>{
-        try{
-            const lyrics=await FunniestLyrics.findById(req.params.id);
-            await lyrics.remove();
-            res.json({message:'Lyrics deleted'})
-           }catch(err){
-            res.status(500).json({message:err.message})
-         }
-    })
 
     
-
-
-
-    
+})
+router.delete('/funniest-lyrics/:id',async(req,res)=>{
+    try{
+        const lyrics=await FunniestLyrics.findById(req.params.id);
+        await lyrics.remove();
+        res.json({message:'Lyrics deleted'})
+       }catch(err){
+        res.status(500).json({message:err.message})
+     }
 })
 
 module.exports = router
