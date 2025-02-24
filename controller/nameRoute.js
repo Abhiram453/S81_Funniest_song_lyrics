@@ -60,10 +60,12 @@ router.put('/funniest-lyrics/:id',async(req,res)=>{
             const lyrics=await FunniestLyrics.findById(req.params.id);
             await lyrics.remove();
             res.json({message:'Lyrics deleted'})
-        }catch(err){
+           }catch(err){
             res.status(500).json({message:err.message})
-        }
+         }
     })
+
+    
 
 
 
