@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const FunniestLyrics = require('../schema/funniestLyrics');
+const FunniestLyrics = require('../schema/songSchema');
 
 
 router.get('/funniest-lyrics', async (req, res) => {
@@ -55,21 +55,17 @@ router.put('/funniest-lyrics/:id',async(req,res)=>{
     }catch(err){
         res.status(500).json({message:err.message})
     }
-    router.delete('/funniest-lyrics/:id',async(req,res)=>{
-        try{
-            const lyrics=await FunniestLyrics.findById(req.params.id);
-            await lyrics.remove();
-            res.json({message:'Lyrics deleted'})
-           }catch(err){
-            res.status(500).json({message:err.message})
-         }
-    })
 
     
-
-
-
-    
+})
+router.delete('/funniest-lyrics/:id',async(req,res)=>{
+    try{
+        const lyrics = await FunniestLyrics.findByIdAndDelete(req.params.id);
+        if (!lyrics) return res.status(404).json({ message: 'Lyrics not found' });
+        res.json({message:'Lyrics deleted'})
+       }catch(err){
+        res.status(500).json({message:err.message})
+     }
 })
 
 module.exports = router

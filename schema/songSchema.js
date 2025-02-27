@@ -1,7 +1,7 @@
-let mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-let funniestLyricsSchema = new Schema({
+const songSchema = new Schema({
     song: {
         type: String,
         required: true
@@ -24,4 +24,4 @@ let funniestLyricsSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('FunniestLyrics', funniestLyricsSchema);
+module.exports = mongoose.model('Song', songSchema);

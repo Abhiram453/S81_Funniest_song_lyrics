@@ -1,83 +1,53 @@
-const mongoose = require('mongoose');
-const FunniestLyrics = require('./schema/funniestLyrics');
-require('dotenv').config();
+const express = require('express');
+const router = express.Router();
+const User = require('../schema/userSchema');
 
-const sampleData = [
-    {
-        "song": "Where is the Panchakattu",
-        "artist": "M. M. Keeravani",
-        "lyrics": "Where is the panchakattu... This is the panchakattu...",
-        "addedBy": "FolkFan",
-        "dateAdded": "2025-02-20T12:00:00Z"
-    },
-    {
-        "song": "Ringa Ringa",
-        "artist": "Devi Sri Prasad",
-        "lyrics": "Ringa ringa roses... pockets full of masala doses...",
-        "addedBy": "DSPFan",
-        "dateAdded": "2025-02-19T15:30:00Z"
-    },
-    {
-        "song": "Cinema Choopista Maava",
-        "artist": "Anup Rubens",
-        "lyrics": "Cinema choopista maava... anthega anthega...",
-        "addedBy": "MovieLover",
-        "dateAdded": "2025-02-18T09:45:00Z"
-    },
-    {
-        "song": "Gudilo Badilo Madilo Vodilo",
-        "artist": "Anirudh Ravichander",
-        "lyrics": "Gudilo badilo madilo vodilo... love lo padipoya nenu...",
-        "addedBy": "MelodyLover",
-        "dateAdded": "2025-02-17T18:20:00Z"
-    },
-    {
-        "song": "Bale Bale Magadivoy",
-        "artist": "Gopi Sundar",
-        "lyrics": "Aa aa ee ee oo oo... Naaku artham kavatledu...",
-        "addedBy": "ComedyKing",
-        "dateAdded": "2025-02-16T10:10:00Z"
-    },
-    {
-        "song": "Jinthatha Jitha Jitha",
-        "artist": "Devi Sri Prasad",
-        "lyrics": "Jinthatha jitha jitha... yentha chesina mathram cheppevaadu ledu...",
-        "addedBy": "DSPFan",
-        "dateAdded": "2025-02-15T14:50:00Z"
-    },
-    {
-        "song": "It's My Life",
-        "artist": "S. Thaman",
-        "lyrics": "It's my life... na istam ga untadi...",
-        "addedBy": "RebelStar",
-        "dateAdded": "2025-02-14T11:30:00Z"
-    },
-    {
-        "song": "Ammayi Kitiki Pakkana",
-        "artist": "M. M. Keeravani",
-        "lyrics": "Ammayi kitiki pakkana... nenu venuka venaka...",
-        "addedBy": "90sKid",
-        "dateAdded": "2025-02-13T16:25:00Z"
-    },
-    {
-        "song": "Blockbuster",
-        "artist": "Mickey J Meyer",
-        "lyrics": "Blockbuster blockbuster... nuvve superstar...",
-        "addedBy": "MovieBuff",
-        "dateAdded": "2025-02-12T09:10:00Z"
-    },
-    {
-        "song": "Pakado Pakado",
-        "artist": "Devi Sri Prasad",
-        "lyrics": "Pakado pakado... neetho vundhe bhayankaram...",
-        "addedBy": "MassFan",
-        "dateAdded": "2025-02-11T13:40:00Z"
+router.post('/users', async (req, res) => {
+    const { username, email, password } = req.body;
+    const newUser = new User({ username, email, password:hashedPassword });
+    const hashedPassword = await bycrypt.hash(password, 10);
+
+    try {
+        const savedUser = await newUser.save();
+        res.status(201).json(savedUser);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
-];
+});
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+router.get('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+router.put('/users/:id', async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+        res.json(updatedUser);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+router.delete('/users/:id', async (req, res) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        if (!deletedUser) return res.status(404).json({ message: 'User not found' });
+        res.json({ message: 'User deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(async () => {
-        await FunniestLyrics.insertMany(sampleData);
-        console.log('Sample data inserted successfully');
-    })
-    .catch(err => console.log('Error: ', err));
+module.exports = router;
