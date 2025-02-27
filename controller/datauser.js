@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const FunniestLyrics = require('./schema/funniestLyrics');
+const FunniestLyrics = require('./schema/songSchema');
 require('dotenv').config();
 
 const sampleData = [
