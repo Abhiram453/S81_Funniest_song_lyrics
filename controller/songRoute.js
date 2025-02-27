@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const FunniestLyrics = require('../schema/funniestLyrics');
+const FunniestLyrics = require('../schema/userSchema');
 
 
 router.get('/funniest-lyrics', async (req, res) => {
