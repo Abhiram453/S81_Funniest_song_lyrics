@@ -4,7 +4,8 @@ const User = require('../schema/userSchema');
 
 router.post('/users', async (req, res) => {
     const { username, email, password } = req.body;
-    const newUser = new User({ username, email, password });
+    const newUser = new User({ username, email, password:hashedPassword });
+    const hashedPassword = await bycrypt.hash(password, 10);
 
     try {
         const savedUser = await newUser.save();
