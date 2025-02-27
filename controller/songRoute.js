@@ -45,13 +45,13 @@ router.get('/funniest-lyrics/:id', async (req, res) => {
 router.put('/funniest-lyrics/:id',async(req,res)=>{
     const{song,artist,lyrics,addedBy}=req.body;
     try{
-        const lyrics=await FunniestLyrics.findById(req.params.id);
-        if(song) lyrics.song=song;
-        if(artist) lyrics.artist=artist;
-        if(lyrics) lyrics.lyrics=lyrics;
-        if (addedBy) lyrics.addedBy=addedBy;
-        await lyrics.save()
-        res.json(lyrics)
+        const lyricsDoc=await FunniestLyrics.findById(req.params.id);
+        if(song) lyricsDoc.song=song;
+        if(artist) lyricsDoc.artist=artist;
+        if(lyrics) lyricsDoc.lyrics=lyrics;
+        if (addedBy) lyricsDoc.addedBy=addedBy;
+        await lyricsDoc.save()
+        res.json(lyricsDoc)
     }catch(err){
         res.status(500).json({message:err.message})
     }
